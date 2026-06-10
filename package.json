@@ -1,0 +1,70 @@
+{
+  "name": "rulekitx",
+  "version": "1.0.0",
+  "description": "Composable AI Engineering Governance System — global prompt orchestration with /rulekit-* commands and bulletproof LLM injection",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "rulekitx": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "postinstall": "node -e \"const fs=require('fs');if(fs.existsSync('./dist/cli.js')){try{require('child_process').execSync('node ./dist/cli.js init',{stdio:'inherit'})}catch(e){console.warn('Postinstall skipped')}}\""
+  },
+  "keywords": [
+    "ai",
+    "governance",
+    "prompt",
+    "engineering",
+    "llm",
+    "skills",
+    "composable",
+    "rules",
+    "coding",
+    "standards",
+    "global",
+    "rulekit",
+    "prompt-injection",
+    "vscode",
+    "cursor",
+    "opencode",
+    "claude",
+    "agent-skills"
+  ],
+  "author": {
+    "name": "sayed"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
