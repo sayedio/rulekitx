@@ -61,14 +61,14 @@ describe('loader', () => {
       expect(result).toHaveLength(3);
       expect(result).toContainEqual({
         name: 'architect',
-        command: '/rulekit-architect',
+        command: '/rulekitx-architect',
         category: 'engineering',
         path: path.posix.join('skills', 'engineering', 'architect.md'),
         description: 'Great stuff'
       });
       expect(result).toContainEqual({
         name: 'premium-ui',
-        command: '/rulekit-premium-ui',
+        command: '/rulekitx-premium-ui',
         category: 'design',
         path: path.posix.join('skills', 'design', 'premium-ui.md'),
         description: 'Great stuff'
@@ -113,7 +113,7 @@ describe('loader', () => {
 
       const skill = { 
         name: 'architect', 
-        command: '/rulekit-architect',
+        command: '/rulekitx-architect',
         category: 'engineering', 
         path: path.posix.join('skills', 'engineering', 'architect.md') 
       };
@@ -128,7 +128,7 @@ describe('loader', () => {
 
       const skill = { 
         name: 'architect', 
-        command: '/rulekit-architect',
+        command: '/rulekitx-architect',
         category: 'engineering', 
         path: path.posix.join('skills', 'engineering', 'architect.md') 
       };
@@ -150,9 +150,9 @@ describe('loader', () => {
       const result = await getCompletionItems(rootDir);
       
       expect(result).toHaveLength(2); // core + architect
-      expect(result[0].command).toBe('/rulekit');
+      expect(result[0].command).toBe('/rulekitx');
       expect(result[0].category).toBe('core');
-      expect(result[1].command).toBe('/rulekit-architect');
+      expect(result[1].command).toBe('/rulekitx-architect');
       expect(result[1].description).toBe('Great stuff');
     });
   });

@@ -115,9 +115,9 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
 
       for (const template of templates) {
         const baseName = path.basename(template.relativePath, '.md');
-        const mdcPath = path.join(cursorRulesDir, `rulekit-${baseName}.mdc`);
+        const mdcPath = path.join(cursorRulesDir, `rulekitx-${baseName}.mdc`);
         const description =
-          extractSkillDescription(template.content) ?? `RuleKit rule: ${baseName}`;
+          extractSkillDescription(template.content) ?? `RuleKitX rule: ${baseName}`;
 
         const mdcContent = buildMdc({
           description,
@@ -126,12 +126,12 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
         });
 
         await fs.writeFile(mdcPath, mdcContent, 'utf-8');
-        createdFiles.push(path.join('.cursor', 'rules', `rulekit-${baseName}.mdc`));
+        createdFiles.push(path.join('.cursor', 'rules', `rulekitx-${baseName}.mdc`));
       }
 
       // Layer 3 always-on rule for Cursor.
       if (memoryBody) {
-        const memMdcPath = path.join(cursorRulesDir, 'rulekit-project-memory.mdc');
+        const memMdcPath = path.join(cursorRulesDir, 'rulekitx-project-memory.mdc');
         await fs.writeFile(
           memMdcPath,
           buildMdc({
@@ -141,7 +141,7 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
           }),
           'utf-8',
         );
-        createdFiles.push(path.join('.cursor', 'rules', 'rulekit-project-memory.mdc'));
+        createdFiles.push(path.join('.cursor', 'rules', 'rulekitx-project-memory.mdc'));
       }
     } catch {
       // Ignore local cursor rules generation errors
@@ -151,7 +151,7 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
     // These files are always loaded by Claude Code / OpenCode, so the block
     // gives those tools an always-on Layer 1 + Layer 3 even without Cursor.
     const blockBody = [
-      '# RuleKit — always-on rules (managed, do not edit between markers)',
+      '# RuleKitX — always-on rules (managed, do not edit between markers)',
       '',
       coreBody,
       memoryBody ? `\n---\n\n${memoryBody}` : '',

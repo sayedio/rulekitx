@@ -64,9 +64,9 @@ async function directoryExists(dirPath: string): Promise<boolean> {
 }
 
 /** Returns true if the given directory name was created by RuleKit
- *  (either the core `rulekit` or any `rulekit-*` skill). */
+ *  (either the core `rulekit` or any `rulekitx-*` skill). */
 function isRulekitOwnedName(name: string): boolean {
-  return name === "rulekit" || name.startsWith("rulekit-");
+  return name === "rulekit" || name.startsWith("rulekitx-");
 }
 
 /** Removes all rulekit-owned subdirectories of `skillsDir`. */
@@ -370,7 +370,7 @@ async function runUninstall(
       try {
         const files = await fs.readdir(cursorRulesDir);
         for (const file of files) {
-          if (file.startsWith('rulekit-') && file.endsWith('.mdc')) {
+          if (file.startsWith('rulekitx-') && file.endsWith('.mdc')) {
             const filePath = path.join(cursorRulesDir, file);
             if (dryRun) {
               result.removedSnippetFiles.push(filePath);

@@ -91,9 +91,9 @@ program
       }
 
       console.log("\nReady to use! Try running:");
-      console.log(chalk.blue("  rulekit list"));
+      console.log(chalk.blue("  rulekitx list"));
       console.log(
-        chalk.blue('  rulekit parse "/rulekit-architect build a new feature"'),
+        chalk.blue('  rulekitx parse "/rulekitx-architect build a new feature"'),
       );
     } catch (err: any) {
       spinner.fail(chalk.red("Initialization failed"));
@@ -398,11 +398,11 @@ program
   });
 
 // ═══════════════════════════════════════════════════════════════
-// PARSE — Extract /rulekit-* commands from a prompt
+// PARSE — Extract /rulekitx-* commands from a prompt
 // ═══════════════════════════════════════════════════════════════
 program
   .command("parse <prompt...>")
-  .description("Parse a prompt to extract /rulekit-* skill commands")
+  .description("Parse a prompt to extract /rulekitx-* skill commands")
   .action((promptParts: string[]) => {
     const prompt = promptParts.join(" ");
 
@@ -414,7 +414,7 @@ program
       `${chalk.cyan("Core Invoked:")} ${result.coreInvoked ? chalk.green("Yes") : chalk.yellow("No")}`,
     );
     console.log(
-      `${chalk.cyan("Skills:")} ${result.skills.length > 0 ? result.skills.map((s) => chalk.blue(`/rulekit-${s}`)).join(", ") : chalk.yellow("None detected")}`,
+      `${chalk.cyan("Skills:")} ${result.skills.length > 0 ? result.skills.map((s) => chalk.blue(`/rulekitx-${s}`)).join(", ") : chalk.yellow("None detected")}`,
     );
     console.log(`${chalk.cyan("Task:")}   ${result.task}`);
     console.log(chalk.gray("────────────────────────────────────────\n"));
@@ -482,17 +482,17 @@ program
     } catch (err: any) {
       spinner.fail(chalk.red("Composition failed"));
       console.error(err.message);
-      console.log(chalk.gray(`\nTip: Did you run 'rulekit init' first?`));
+      console.log(chalk.gray(`\nTip: Did you run 'rulekitx init' first?`));
       process.exit(1);
     }
   });
 
 // ═══════════════════════════════════════════════════════════════
-// LIST — Show all available /rulekit-* skills
+// LIST — Show all available /rulekitx-* skills
 // ═══════════════════════════════════════════════════════════════
 program
   .command("list")
-  .description("List all available /rulekit-* skills")
+  .description("List all available /rulekitx-* skills")
   .action(async () => {
     const spinner = ora("Discovering skills...").start();
 
@@ -506,17 +506,17 @@ program
       if (skills.length === 0) {
         console.log(chalk.yellow(`No skills found in ${rootDir}/skills/`));
         console.log(
-          chalk.gray(`Run 'rulekit init' to scaffold the default skills.`),
+          chalk.gray(`Run 'rulekitx init' to scaffold the default skills.`),
         );
         return;
       }
 
       console.log(chalk.bold(`\nAvailable Commands (${skills.length + 1})`));
 
-      // Always show /rulekit core command first
+      // Always show /rulekitx core command first
       console.log(chalk.cyan("\n  CORE"));
       console.log(
-        `    ${chalk.blue("/rulekit")} ${chalk.gray("— Load core engineering governance rules")}`,
+        `    ${chalk.blue("/rulekitx")} ${chalk.gray("— Load core engineering governance rules")}`,
       );
 
       // Group by category
@@ -544,12 +544,12 @@ program
   });
 
 // ═══════════════════════════════════════════════════════════════
-// COMPLETIONS — Output all /rulekit-* commands for IDE extensions
+// COMPLETIONS — Output all /rulekitx-* commands for IDE extensions
 // ═══════════════════════════════════════════════════════════════
 program
   .command("completions")
   .description(
-    "Output all /rulekit-* commands as JSON (for IDE extension consumption)",
+    "Output all /rulekitx-* commands as JSON (for IDE extension consumption)",
   )
   .option("--format <format>", "Output format: json or plain", "json")
   .action(async (options: { format: string }) => {

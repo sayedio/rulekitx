@@ -88,7 +88,7 @@ describe("uninstall", () => {
     vi.mocked(fs.readdir).mockImplementation((p) => {
       const normalized = path.normalize(p as string).replace(/\\/g, "/");
       if (normalized === "/myproject/.cursor/rules") {
-        return Promise.resolve(["rulekit-core.mdc", "other-rule.mdc"] as any);
+        return Promise.resolve(["rulekitx-core.mdc", "other-rule.mdc"] as any);
       }
       return Promise.reject(new Error("ENOENT"));
     });
@@ -99,11 +99,11 @@ describe("uninstall", () => {
     });
 
     const normalizedRemoved = result.removedSnippetFiles.map(f => path.normalize(f).replace(/\\/g, "/"));
-    expect(normalizedRemoved).toContain("/myproject/.cursor/rules/rulekit-core.mdc");
+    expect(normalizedRemoved).toContain("/myproject/.cursor/rules/rulekitx-core.mdc");
     expect(normalizedRemoved).not.toContain("/myproject/.cursor/rules/other-rule.mdc");
     
     // Check unlink call
     const unlinkCalls = vi.mocked(fs.unlink).mock.calls.map(args => path.normalize(args[0] as string).replace(/\\/g, "/"));
-    expect(unlinkCalls).toContain("/myproject/.cursor/rules/rulekit-core.mdc");
+    expect(unlinkCalls).toContain("/myproject/.cursor/rules/rulekitx-core.mdc");
   });
 });

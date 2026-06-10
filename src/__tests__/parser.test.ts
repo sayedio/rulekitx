@@ -4,7 +4,7 @@ import { parsePrompt } from '../parser.js';
 describe('parser', () => {
   describe('parsePrompt', () => {
     it('should extract a single skill and the task text', () => {
-      const input = '/rulekit-architect build auth system';
+      const input = '/rulekitx-architect build auth system';
       const result = parsePrompt(input);
       
       expect(result.skills).toEqual(['architect']);
@@ -13,7 +13,7 @@ describe('parser', () => {
     });
 
     it('should extract multiple skills', () => {
-      const input = '/rulekit-reviewer /rulekit-collab-safe review payment flow';
+      const input = '/rulekitx-reviewer /rulekitx-collab-safe review payment flow';
       const result = parsePrompt(input);
       
       expect(result.skills).toEqual(['reviewer', 'collab-safe']);
@@ -21,8 +21,8 @@ describe('parser', () => {
       expect(result.coreInvoked).toBe(true);
     });
 
-    it('should handle /rulekit alone (core only)', () => {
-      const input = '/rulekit build a thing';
+    it('should handle /rulekitx alone (core only)', () => {
+      const input = '/rulekitx build a thing';
       const result = parsePrompt(input);
       
       expect(result.skills).toEqual([]);
@@ -31,7 +31,7 @@ describe('parser', () => {
     });
 
     it('should handle multiline prompts with skills on first line', () => {
-      const input = `/rulekit-premium-ui /rulekit-redesign
+      const input = `/rulekitx-premium-ui /rulekitx-redesign
 improve dashboard homepage
 make it look like stripe`;
       const result = parsePrompt(input);
@@ -42,7 +42,7 @@ make it look like stripe`;
     });
 
     it('should deduplicate duplicate skills preserving order', () => {
-      const input = '/rulekit-architect /rulekit-reviewer /rulekit-architect review auth';
+      const input = '/rulekitx-architect /rulekitx-reviewer /rulekitx-architect review auth';
       const result = parsePrompt(input);
       
       expect(result.skills).toEqual(['architect', 'reviewer']);
@@ -72,7 +72,7 @@ make it look like stripe`;
     });
 
     it('should not match file paths or urls', () => {
-      const input = '/rulekit-architect review https://github.com/repo/file.ts and /etc/hosts';
+      const input = '/rulekitx-architect review https://github.com/repo/file.ts and /etc/hosts';
       const result = parsePrompt(input);
       
       expect(result.skills).toEqual(['architect']);

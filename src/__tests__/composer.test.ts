@@ -15,7 +15,7 @@ describe('composer', () => {
   it('should compose prompt deterministically: core -> skills -> standards -> task', async () => {
     vi.mocked(loader.loadCore).mockResolvedValue('CORE CONTENT');
     vi.mocked(loader.resolveSkills).mockResolvedValue({
-      found: [{ name: 'architect', category: 'engineering', path: 'path', command: '/rulekit-architect' } as SkillDefinition],
+      found: [{ name: 'architect', category: 'engineering', path: 'path', command: '/rulekitx-architect' } as SkillDefinition],
       unknown: []
     });
     vi.mocked(loader.loadSkill).mockResolvedValue('ARCHITECT CONTENT');

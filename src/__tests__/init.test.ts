@@ -59,14 +59,14 @@ describe('init', () => {
 
     // Layer 1 — core is always-on (alwaysApply: true, no globs)
     expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join('/myproject', '.cursor', 'rules', 'rulekit-core.mdc'),
+      path.join('/myproject', '.cursor', 'rules', 'rulekitx-core.mdc'),
       '---\ndescription: Core rules\nalwaysApply: true\n---\n\ncore content\n',
       'utf-8'
     );
 
     // Layer 2 — domain skill is Agent Requested (description only, no globs, no alwaysApply)
     expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join('/myproject', '.cursor', 'rules', 'rulekit-test.mdc'),
+      path.join('/myproject', '.cursor', 'rules', 'rulekitx-test.mdc'),
       '---\ndescription: Test skill\n---\n\ntest body\n',
       'utf-8'
     );

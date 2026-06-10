@@ -79,7 +79,7 @@ export async function discoverSkills(rootDir: string): Promise<SkillDefinition[]
 
           skills.push({
             name: skillName,
-            command: `/rulekit-${skillName}`,
+            command: `/rulekitx-${skillName}`,
             category: category.name,
             path: path.posix.join('skills', category.name, file),
             description
@@ -175,14 +175,14 @@ export async function loadSkill(rootDir: string, skill: SkillDefinition): Promis
 
 /**
  * Generates completion items for IDE integration.
- * Returns a list of all /rulekit-* commands with descriptions.
+ * Returns a list of all /rulekitx-* commands with descriptions.
  */
 export async function getCompletionItems(rootDir: string): Promise<SkillCompletionItem[]> {
   const skills = await discoverSkills(rootDir);
   
   const items: SkillCompletionItem[] = [
     {
-      command: '/rulekit',
+      command: '/rulekitx',
       description: 'Load core engineering governance rules only',
       category: 'core'
     },

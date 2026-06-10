@@ -1,5 +1,5 @@
 // src/parser.ts
-// Parses user prompts to extract /rulekit and /rulekit-<skill> commands
+// Parses user prompts to extract /rulekitx and /rulekitx-<skill> commands
 
 import { ParseResult } from './types.js';
 
@@ -7,12 +7,12 @@ import { ParseResult } from './types.js';
  * Parses a user prompt to extract RuleKit slash-command skills and the remaining task text.
  * 
  * Command format:
- *   /rulekit           → Loads core rules only (no specific skill)
- *   /rulekit-architect → Loads core + architect skill
- *   /rulekit-premium-ui → Loads core + premium-ui skill
+ *   /rulekitx           → Loads core rules only (no specific skill)
+ *   /rulekitx-architect → Loads core + architect skill
+ *   /rulekitx-premium-ui → Loads core + premium-ui skill
  * 
  * Multiple commands can be combined:
- *   /rulekit-architect /rulekit-premium-ui build auth system
+ *   /rulekitx-architect /rulekitx-premium-ui build auth system
  * 
  * @param input The raw prompt string
  * @returns ParseResult containing the extracted skills, core flag, and task
@@ -22,10 +22,10 @@ export function parsePrompt(input: string): ParseResult {
     return { skills: [], task: '', raw: input, coreInvoked: false };
   }
 
-  // Match /rulekit (core only) or /rulekit-<skill-name>
+  // Match /rulekitx (core only) or /rulekitx-<skill-name>
   // Must be at start of string or preceded by whitespace
   // Skill names: alphanumeric + hyphens, starting with a letter
-  const rulekitRegex = /(?:^|\s)\/rulekit(?:-([a-zA-Z][a-zA-Z0-9-]*))?(?=\s|$)/g;
+  const rulekitRegex = /(?:^|\s)\/rulekitx(?:-([a-zA-Z][a-zA-Z0-9-]*))?(?=\s|$)/g;
   
   const rawSkills: string[] = [];
   let coreInvoked = false;

@@ -24,10 +24,10 @@ async function composeSkillBody(
   rootDir: string,
   command: string,
 ): Promise<string> {
-  if (command === "/rulekit") {
+  if (command === "/rulekitx") {
     return loadCore(rootDir);
   }
-  const skillName = command.replace(/^\/rulekit-/, "");
+  const skillName = command.replace(/^\/rulekitx-/, "");
   const { found } = await resolveSkills(rootDir, [skillName]);
   if (found.length > 0) {
     return loadSkill(rootDir, found[0]);
@@ -193,25 +193,25 @@ export async function updateAgentSkillLock(
   const sourceType = "local";
 
   for (const item of items) {
-    const commandName = item.command.replace(/^\//, "");
-    const skillDir = path.join(skillsDir, commandName);
+  const commandName = item.command.replace(/^\//, "");
+  const skillDir = path.join(skillsDir, commandName);
 
-    let hash = "";
-    try {
-      hash = await computeSkillFolderHash(skillDir);
-    } catch (err: any) {
-      results.errors.push(
-        `Failed to hash ${skillDir}: ${err.message}`,
-      );
-      continue;
-    }
+  let hash = "";
+  try {
+    hash = await computeSkillFolderHash(skillDir);
+  } catch (err: any) {
+    results.errors.push(
+      `Failed to hash ${skillDir}: ${err.message}`,
+    );
+    continue;
+  }
 
-    // skillPath is relative to the lock file's parent dir (where the
-    // skills/ subdir lives), e.g. "skills/rulekit-architect/SKILL.md".
-    const skillPath = path
-      .relative(path.dirname(lockFilePath), path.join(skillDir, "SKILL.md"))
-      .split(path.sep)
-      .join("/");
+  // skillPath is relative to the lock file's parent dir (where the
+  // skills/ subdir lives), e.g. "skills/rulekitx-architect/SKILL.md".
+  const skillPath = path
+    .relative(path.dirname(lockFilePath), path.join(skillDir, "SKILL.md"))
+    .split(path.sep)
+    .join("/");
 
     const existing = lock.skills[commandName];
     lock.skills[commandName] = {
@@ -280,7 +280,7 @@ export async function syncIdeSnippets(
         created: [],
         skipped: [],
         errors: [
-          'RuleKit directory not found. Please run "rulekit init" first.',
+          'RuleKit directory not found. Please run "rulekitx init" first.',
         ],
       };
     }
@@ -296,7 +296,7 @@ export async function syncIdeSnippets(
   // 1. Generate VS Code Snippets JSON
   const vsCodeSnippets: Record<string, any> = {};
   for (const item of items) {
-    vsCodeSnippets[`RuleKit: ${item.command}`] = {
+    vsCodeSnippets[`RuleKitX: ${item.command}`] = {
       prefix: item.command,
       body: [item.command],
       description: item.description,
@@ -305,7 +305,7 @@ export async function syncIdeSnippets(
   const vsCodeJson = JSON.stringify(vsCodeSnippets, null, 2);
 
   // 2. Generate JetBrains Live Templates XML
-  let jbXml = `<templateSet group="RuleKit">\n`;
+  let jbXml = `<templateSet group="RuleKitX">\n`;
   for (const item of items) {
     const escapedDesc = item.description
       .replace(/&/g, "&amp;")
@@ -537,7 +537,7 @@ export async function syncAgentConfigs(
         removed: [],
         skipped: [],
         errors: [
-          'RuleKit directory not found. Please run "rulekit init" first.',
+          'RuleKit directory not found. Please run "rulekitx init" first.',
         ],
       };
     }
@@ -567,7 +567,7 @@ export async function syncAgentConfigs(
   let coreBlockBody = "";
   try {
     coreBlockBody = [
-      "# RuleKit — always-on core (managed, do not edit between markers)",
+      "# RuleKitX — always-on core (managed, do not edit between markers)",
       "",
       await loadCore(rootDir),
     ].join("\n");
