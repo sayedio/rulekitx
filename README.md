@@ -36,20 +36,17 @@ RuleKitX is organized so that **only the rules relevant to your prompt are loade
 ## Quick Start
 
 ```bash
-# 1. Install globally
+# 1. Install globally (auto-initializes ~/.rulekitx/)
 npm install -g rulekitx
 
-# 2. Initialize global rules (~/.rulekitx/)
-rulekitx init
-
-# 3. Try a skill (returns composed XML-wrapped context)
+# 2. Try a skill (returns composed XML-wrapped context)
 rulekitx compose "/rulekitx-architect build a new feature"
 ```
 
 To use project-specific rules and enable native Cursor auto-read:
 ```bash
 # Initialize inside your project directory
-npx rulekitx init --local
+rulekitx init --local
 ```
 
 ---
@@ -80,6 +77,7 @@ Each skill owns exactly one concern and declares its own Scope / Out of Scope so
 1. **Templates:** Rules are Markdown files with YAML frontmatter under `templates/` (core + skills), scanned dynamically by `src/scanner.ts`.
 2. **Scaffolding:** `rulekitx init` copies templates to `~/.rulekitx/` (global) or `./.rulekitx/` (local). `--local` also generates Layer 3 Project Memory and the layered `.cursor/rules/*.mdc`.
 3. **Syncing:** `rulekitx install-ide` registers native skills for OpenCode/Claude, injects the always-on core block into their instruction files, and adds autocomplete snippets for VS Code, Cursor, and JetBrains.
+4. **Custom Skills:** You can author your own project-specific skills by placing markdown files with `name`/`description` frontmatter into your `.rulekitx/skills/` directory and running `rulekitx install-ide`.
 
 ---
 
@@ -89,11 +87,12 @@ Each skill owns exactly one concern and declares its own Scope / Out of Scope so
 |---|---|
 | `rulekitx init` | Scaffold `~/.rulekitx/` (use `--local` for project-level + Project Memory) |
 | `rulekitx memory` | Generate/refresh `.rulekitx/project-memory.md` from the detected stack (`--force` to overwrite) |
-| `rulekitx install-ide` | Re-sync IDE snippets and agent skills |
+| `rulekitx install-ide` | Re-sync IDE snippets and agent skills globally |
 | `rulekitx uninstall` | Remove all RuleKitX files, snippets, and lock entries |
 | `rulekitx list` | List all available `/rulekitx-*` skills |
 | `rulekitx parse "<prompt>"` | Show which skills a prompt invokes |
 | `rulekitx compose "<prompt>"` | Output the full XML-wrapped prompt context |
-| `rulekitx doctor` | Health check the global installation |
+| `rulekitx doctor` | Check RuleKitX installation health and configured layers |
+| `rulekitx completions` | Output commands as JSON for IDE extension consumption |
 
 ---
