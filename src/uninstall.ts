@@ -1,8 +1,8 @@
 // src/uninstall.ts
-// Removes everything RuleKit wrote into the user's home directory and
+// Removes everything RuleKitX wrote into the user's home directory and
 // agent config dirs. Safe-by-default: only touches files/dirs that we
-// own (identified by the .rulekit-owned marker, the `rulekit-` prefix,
-// or the canonical filenames like rulekit.code-snippets).
+// own (identified by the .rulekitx-owned marker, the `rulekitx-` prefix,
+// or the canonical filenames like rulekitx.code-snippets).
 
 import * as fs from "fs/promises";
 import * as path from "path";
@@ -43,7 +43,7 @@ export interface UninstallResult {
   errors: string[];
 }
 
-const OWNERSHIP_MARKER = ".rulekit-owned";
+const OWNERSHIP_MARKER = ".rulekitx-owned";
 
 async function fileExists(filePath: string): Promise<boolean> {
   try {
@@ -63,13 +63,13 @@ async function directoryExists(dirPath: string): Promise<boolean> {
   }
 }
 
-/** Returns true if the given directory name was created by RuleKit
- *  (either the core `rulekit` or any `rulekitx-*` skill). */
+/** Returns true if the given directory name was created by RuleKitX
+ *  (either the core `rulekitx` or any `rulekitx-*` skill). */
 function isRulekitOwnedName(name: string): boolean {
-  return name === "rulekit" || name.startsWith("rulekitx-");
+  return name === "rulekitx" || name.startsWith("rulekitx-");
 }
 
-/** Removes all rulekit-owned subdirectories of `skillsDir`. */
+/** Removes all rulekitx-owned subdirectories of `skillsDir`. */
 async function removeRulekitSkillsFromDir(
   skillsDir: string,
 ): Promise<{ removed: string[]; errors: string[] }> {
@@ -111,7 +111,7 @@ async function removeRulekitSkillsFromDir(
   return { removed, errors };
 }
 
-/** Removes IDE snippet / template files that RuleKit wrote. */
+/** Removes IDE snippet / template files that RuleKitX wrote. */
 async function removeIdeSnippets(
   homedir: string,
   platform: NodeJS.Platform,
@@ -135,10 +135,10 @@ async function removeIdeSnippets(
   }
 
   for (const ide of ["Code", "Cursor"]) {
-    candidateFiles.push(path.join(configBase, ide, "User", "snippets", "rulekit.code-snippets"));
+    candidateFiles.push(path.join(configBase, ide, "User", "snippets", "rulekitx.code-snippets"));
   }
 
-  // JetBrains: walk every <ide>/templates/rulekit.xml
+  // JetBrains: walk every <ide>/templates/rulekitx.xml
   const jbBase = path.join(configBase, "JetBrains");
   if (await directoryExists(jbBase)) {
     try {
@@ -146,7 +146,7 @@ async function removeIdeSnippets(
       for (const d of dirs) {
         if (d.isDirectory()) {
           candidateFiles.push(
-            path.join(jbBase, d.name, "templates", "rulekit.xml"),
+            path.join(jbBase, d.name, "templates", "rulekitx.xml"),
           );
         }
       }
@@ -155,8 +155,8 @@ async function removeIdeSnippets(
     }
   }
 
-  // Rulekit-specific root file
-  candidateFiles.push(path.join(homedir, ".rulekit", "rulekit-snippets.json"));
+  // RuleKitX-specific root file
+  candidateFiles.push(path.join(homedir, ".rulekitx", "rulekitx-snippets.json"));
 
   for (const file of candidateFiles) {
     if (!(await fileExists(file))) continue;
@@ -307,7 +307,7 @@ async function runUninstall(
     }
     for (const ide of ["Code", "Cursor"]) {
       candidates.push(
-        path.join(configBase, ide, "User", "snippets", "rulekit.code-snippets"),
+        path.join(configBase, ide, "User", "snippets", "rulekitx.code-snippets"),
       );
     }
     const jbBase = path.join(configBase, "JetBrains");
@@ -317,7 +317,7 @@ async function runUninstall(
         for (const d of dirs) {
           if (d.isDirectory()) {
             candidates.push(
-              path.join(jbBase, d.name, "templates", "rulekit.xml"),
+              path.join(jbBase, d.name, "templates", "rulekitx.xml"),
             );
           }
         }
@@ -325,7 +325,7 @@ async function runUninstall(
         // ignore
       }
     }
-    candidates.push(path.join(rulekitDir, "rulekit-snippets.json"));
+    candidates.push(path.join(rulekitDir, "rulekitx-snippets.json"));
     for (const f of candidates) {
       if (await fileExists(f)) result.removedSnippetFiles.push(f);
     }
@@ -386,7 +386,7 @@ async function runUninstall(
     }
   }
 
-  // 6) Strip RuleKit managed blocks from always-loaded agent files.
+  // 6) Strip RuleKitX managed blocks from always-loaded agent files.
   //    Global: ~/.claude/CLAUDE.md and ~/.config/opencode/AGENTS.md.
   //    Local:  project CLAUDE.md and AGENTS.md.
   const managedFiles: string[] = options.local

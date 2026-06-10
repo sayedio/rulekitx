@@ -41,7 +41,7 @@ describe("uninstall", () => {
   it("previewUninstall uses the global rulekit dir by default", async () => {
     const result = await previewUninstall();
 
-    expect(result.rulekitDir).toBe(path.join(homedir(), ".rulekit"));
+    expect(result.rulekitDir).toBe(path.join(homedir(), ".rulekitx"));
   });
 
   it("previewUninstall uses the local rulekit dir when --local is passed", async () => {
@@ -50,7 +50,7 @@ describe("uninstall", () => {
       projectDir: "/myproject",
     });
 
-    expect(result.rulekitDir).toBe(path.join("/myproject", ".rulekit"));
+    expect(result.rulekitDir).toBe(path.join("/myproject", ".rulekitx"));
   });
 
   it("uninstallRuleKit calls fs.rm on the rulekit dir when it exists", async () => {
@@ -59,7 +59,7 @@ describe("uninstall", () => {
     await uninstallRuleKit();
 
     expect(fs.rm).toHaveBeenCalledWith(
-      path.join(homedir(), ".rulekit"),
+      path.join(homedir(), ".rulekitx"),
       expect.objectContaining({ recursive: true, force: true }),
     );
   });
@@ -78,7 +78,7 @@ describe("uninstall", () => {
     // Mock local rulekit dir exists
     vi.mocked(fs.stat).mockImplementation((p) => {
       const normalized = path.normalize(p as string).replace(/\\/g, "/");
-      if (normalized === "/myproject/.rulekit" || normalized === "/myproject/.cursor/rules") {
+      if (normalized === "/myproject/.rulekitx" || normalized === "/myproject/.cursor/rules") {
         return Promise.resolve({ isDirectory: () => true } as any);
       }
       return Promise.reject(new Error("ENOENT"));

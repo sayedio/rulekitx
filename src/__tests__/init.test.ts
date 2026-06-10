@@ -28,7 +28,7 @@ describe('init', () => {
     expect(result.alreadyExisted).toBe(false);
     expect(result.createdFiles).toHaveLength(2);
 
-    const expectedDir = path.join(homedir(), '.rulekit');
+    const expectedDir = path.join(homedir(), '.rulekitx');
     expect(result.rootDir).toBe(expectedDir);
 
     // Should create root dir
@@ -52,7 +52,7 @@ describe('init', () => {
 
     const result = await initRuleKit({ local: true, projectDir: '/myproject' });
 
-    expect(result.rootDir).toBe(path.join('/myproject', '.rulekit'));
+    expect(result.rootDir).toBe(path.join('/myproject', '.rulekitx'));
 
     // Should create .cursor/rules directory
     expect(fs.mkdir).toHaveBeenCalledWith(path.join('/myproject', '.cursor', 'rules'), { recursive: true });
@@ -73,7 +73,7 @@ describe('init', () => {
 
     // Layer 3 — a project memory file is generated
     expect(fs.writeFile).toHaveBeenCalledWith(
-      path.join('/myproject', '.rulekit', 'project-memory.md'),
+      path.join('/myproject', '.rulekitx', 'project-memory.md'),
       expect.any(String),
       'utf-8'
     );

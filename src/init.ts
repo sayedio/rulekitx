@@ -32,7 +32,7 @@ export function buildMdc(opts: {
 }
 
 export interface InitOptions {
-  /** If true, initialize in the local project directory (.rulekit/) instead of global (~/.rulekit/) */
+  /** If true, initialize in the local project directory (.rulekitx/) instead of global (~/.rulekitx/) */
   local?: boolean;
   /** Override the project directory for local init. Defaults to process.cwd(). */
   projectDir?: string;
@@ -41,8 +41,8 @@ export interface InitOptions {
 /**
  * Initializes a new RuleKit installation.
  * 
- * By default, installs to the global directory: ~/.rulekit/
- * With --local flag, installs to the project directory: .rulekit/
+ * By default, installs to the global directory: ~/.rulekitx/
+ * With --local flag, installs to the project directory: .rulekitx/
  */
 export async function initRuleKit(options: InitOptions = {}): Promise<InitResult> {
   const rulekitDir = options.local 
@@ -82,7 +82,7 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
   // Local initialization: generate the 3-layer project delivery.
   //   Layer 1 (core)          → .cursor/rules/rulekit-core.mdc (alwaysApply)
   //   Layer 2 (domain skills) → .cursor/rules/rulekit-<skill>.mdc (Agent Requested)
-  //   Layer 3 (project memory)→ .rulekit/project-memory.md + alwaysApply .mdc
+  //   Layer 3 (project memory)→ .rulekitx/project-memory.md + alwaysApply .mdc
   // Plus a managed block (core + memory) in project CLAUDE.md / AGENTS.md.
   // ─────────────────────────────────────────────────────────────
   if (options.local) {
@@ -168,7 +168,7 @@ export async function initRuleKit(options: InitOptions = {}): Promise<InitResult
   }
 
   // Prune stale .md files in directories we own that are no longer in the
-  // template manifest. This keeps ~/.rulekit/ in sync with the current
+  // template manifest. This keeps ~/.rulekitx/ in sync with the current
   // source-of-truth when templates are removed between releases.
   const removedFiles = await pruneStaleRulekitFiles(rulekitDir, ownedPaths);
 

@@ -7,7 +7,7 @@ import * as path from 'path';
 vi.mock('fs/promises');
 
 describe('loader', () => {
-  const rootDir = '/fake/root/.rulekit';
+  const rootDir = '/fake/root/.rulekitx';
 
   beforeEach(() => {
     vi.resetAllMocks();

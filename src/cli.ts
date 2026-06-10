@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // src/cli.ts
-// RuleKit v2 CLI — global prompt governance system
+// RuleKitX CLI — global prompt governance system
 
 import { Command } from "commander";
 import chalk from "chalk";
@@ -31,29 +31,29 @@ program
   .version("1.0.0");
 
 // ═══════════════════════════════════════════════════════════════
-// INIT — Scaffold RuleKit (global by default, --local for project)
+// INIT — Scaffold RuleKitX (global by default, --local for project)
 // ═══════════════════════════════════════════════════════════════
 program
   .command("init")
-  .description("Scaffold RuleKit rules (global ~/.rulekit/ by default)")
+  .description("Scaffold RuleKitX rules (global ~/.rulekitx/ by default)")
   .option(
     "-l, --local",
-    "Initialize in current project directory (.rulekit/) instead of global",
+    "Initialize in current project directory (.rulekitx/) instead of global",
   )
   .action(async (options: { local?: boolean }) => {
-    const spinner = ora("Initializing RuleKit...").start();
+    const spinner = ora("Initializing RuleKitX...").start();
     try {
       const result = await initRuleKit({
         local: options.local,
         projectDir: process.cwd(),
       });
 
-      spinner.succeed(chalk.green("RuleKit initialized successfully!"));
+      spinner.succeed(chalk.green("RuleKitX initialized successfully!"));
 
       if (result.alreadyExisted) {
         console.log(
           chalk.yellow(
-            "\nNote: Existing RuleKit directory was updated with missing files.",
+            "\nNote: Existing RuleKitX directory was updated with missing files.",
           ),
         );
       }
@@ -108,7 +108,7 @@ program
 program
   .command("memory")
   .description(
-    "Generate or refresh the project memory file (.rulekit/project-memory.md) from detected stack",
+    "Generate or refresh the project memory file (.rulekitx/project-memory.md) from detected stack",
   )
   .option(
     "-f, --force",
@@ -152,7 +152,7 @@ program
         await fs.access(cursorRulesDir);
         const { stripFrontmatter } = await import("./loader.js");
         await fs.writeFile(
-          path.join(cursorRulesDir, "rulekit-project-memory.mdc"),
+          path.join(cursorRulesDir, "rulekitx-project-memory.mdc"),
           buildMdc({
             description:
               "Project-scoped memory: stack, architecture, conventions, business rules.",
@@ -180,17 +180,17 @@ program
   });
 
 // ═══════════════════════════════════════════════════════════════
-// UNINSTALL — Remove everything RuleKit wrote into the user's home dir
+// UNINSTALL — Remove everything RuleKitX wrote into the user's home dir
 // ═══════════════════════════════════════════════════════════════
 program
   .command("uninstall")
   .description(
-    "Remove ~/.rulekit/, agent skill dirs, IDE snippets, and lock-file entries. " +
-      "Does NOT remove the rulekit npm package itself (run `npm uninstall -g rulekit` for that).",
+    "Remove ~/.rulekitx/, agent skill dirs, IDE snippets, and lock-file entries. " +
+      "Does NOT remove the rulekitx npm package itself (run `npm uninstall -g rulekitx` for that).",
   )
   .option(
     "-l, --local",
-    "Uninstall the project-local .rulekit/ (./.rulekit/) instead of the global one",
+    "Uninstall the project-local .rulekitx/ (./.rulekitx/) instead of the global one",
   )
   .option("-y, --yes", "Skip the confirmation prompt")
   .action(async (options: { local?: boolean; yes?: boolean }) => {
@@ -202,13 +202,13 @@ program
 
       const location = options.local ? "local project" : "global";
       console.log(
-        chalk.bold(`\nRuleKit uninstall (${location})`),
+        chalk.bold(`\nRuleKitX uninstall (${location})`),
       );
 
       if (!preview.rulekitDirFound) {
         console.log(
           chalk.yellow(
-            `No RuleKit directory found at ${preview.rulekitDir}.`,
+            `No RuleKitX directory found at ${preview.rulekitDir}.`,
           ),
         );
       } else {
@@ -258,12 +258,12 @@ program
       if (totalChanges === 0) {
         console.log(
           chalk.green(
-            "\nNothing to remove. RuleKit is already fully uninstalled.",
+            "\nNothing to remove. RuleKitX is already fully uninstalled.",
           ),
         );
         console.log(
           chalk.gray(
-            "Run `npm uninstall -g rulekit` to remove the CLI package.",
+            "Run `npm uninstall -g rulekitx` to remove the CLI package.",
           ),
         );
         return;
@@ -291,7 +291,7 @@ program
         }
       }
 
-      const spinner = ora("Removing RuleKit files...").start();
+      const spinner = ora("Removing RuleKitX files...").start();
       const result = await uninstallRuleKit({
         local: options.local,
         projectDir: process.cwd(),
@@ -303,7 +303,7 @@ program
           console.log(chalk.gray(`  ! ${e}`));
         }
       } else {
-        spinner.succeed(chalk.green("RuleKit files removed."));
+        spinner.succeed(chalk.green("RuleKitX files removed."));
       }
 
       console.log(
@@ -311,7 +311,7 @@ program
           "\nTo finish uninstalling, also remove the CLI package:",
         ),
       );
-      console.log(chalk.blue("  npm uninstall -g rulekit"));
+      console.log(chalk.blue("  npm uninstall -g rulekitx"));
     } catch (err: any) {
       console.error(chalk.red("Uninstall failed:"));
       console.error(err.message);
@@ -387,7 +387,7 @@ program
 
       console.log(
         chalk.gray(
-          "\nNote: For Neovim users, a rulekit-snippets.json file was generated in ~/.rulekit/",
+          "\nNote: For Neovim users, a rulekitx-snippets.json file was generated in ~/.rulekitx/",
         ),
       );
     } catch (err: any) {
@@ -575,21 +575,21 @@ program
 // ═══════════════════════════════════════════════════════════════
 program
   .command("doctor")
-  .description("Check RuleKit installation health")
+  .description("Check RuleKitX installation health")
   .action(async () => {
-    console.log(chalk.bold("\nRuleKit Doctor\n"));
+    console.log(chalk.bold("\nRuleKitX Doctor\n"));
 
     const globalDir = getGlobalRulekitDir();
 
     // Check global directory
     try {
       const rootDir = await resolveRulekitDir();
-      console.log(chalk.green(`  ✓ RuleKit directory found: ${rootDir}`));
+      console.log(chalk.green(`  ✓ RuleKitX directory found: ${rootDir}`));
 
       const isGlobal = rootDir === globalDir;
       console.log(
         chalk.gray(
-          `    Type: ${isGlobal ? "Global (~/.rulekit/)" : "Local (project .rulekit/)"}`,
+          `    Type: ${isGlobal ? "Global (~/.rulekitx/)" : "Local (project .rulekitx/)"}`,
         ),
       );
 
@@ -601,7 +601,7 @@ program
         console.log(chalk.green("    ✓ core.md exists"));
       } catch {
         console.log(
-          chalk.red('    ✗ core.md missing — run "rulekit init" to fix'),
+          chalk.red('    ✗ core.md missing — run "rulekitx init" to fix'),
         );
       }
 
@@ -625,14 +625,14 @@ program
       } catch {
         console.log(
           chalk.gray(
-            "    – not present (run `rulekit init --local` or `rulekit memory` inside a project)",
+            "    – not present (run `rulekitx init --local` or `rulekitx memory` inside a project)",
           ),
         );
       }
     } catch {
-      console.log(chalk.red(`  ✗ RuleKit not initialized`));
+      console.log(chalk.red(`  ✗ RuleKitX not initialized`));
       console.log(chalk.gray(`    Expected global directory: ${globalDir}`));
-      console.log(chalk.gray(`    Run: rulekit init`));
+      console.log(chalk.gray(`    Run: rulekitx init`));
     }
 
     console.log("");

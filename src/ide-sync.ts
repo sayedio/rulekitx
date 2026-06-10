@@ -15,7 +15,7 @@ import { resolveRulekitDir } from "./global-resolver.js";
 import { upsertBlockInFile } from "./managed-block.js";
 
 /**
- * Builds the body for a single skill's SKILL.md. Core (`/rulekit`) returns the
+ * Builds the body for a single skill's SKILL.md. Core (`/rulekitx`) returns the
  * core content; every other command returns ONLY that skill's content. Core is
  * no longer embedded into each skill — it is delivered as its own always-on
  * layer — which keeps each skill self-contained and removes large duplication.
@@ -32,7 +32,7 @@ async function composeSkillBody(
   if (found.length > 0) {
     return loadSkill(rootDir, found[0]);
   }
-  return `You are executing the **${command}** skill via RuleKit. Refer to ${rootDir} for rules.`;
+  return `You are executing the **${command}** skill via RuleKitX. Refer to ${rootDir} for rules.`;
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -45,9 +45,9 @@ async function fileExists(filePath: string): Promise<boolean> {
 }
 
 /** Hidden marker file placed in each skill dir we own. Used to safely prune
- *  stale rulekit skills without touching user-created skills that happen to
- *  share the `rulekit-` prefix. */
-const OWNERSHIP_MARKER = ".rulekit-owned";
+ *  stale rulekitx skills without touching user-created skills that happen to
+ *  share the `rulekitx-` prefix. */
+const OWNERSHIP_MARKER = ".rulekitx-owned";
 
 async function markSkillOwned(skillDir: string): Promise<void> {
   await fs.writeFile(path.join(skillDir, OWNERSHIP_MARKER), "", "utf-8");
@@ -176,9 +176,9 @@ async function writeSkillLock(
   );
 }
 
-/** Adds or refreshes RuleKit skill entries in the agent's lock file
+/** Adds or refreshes RuleKitX skill entries in the agent's lock file
  *  (e.g. `~/.agents/.skill-lock.json` or `~/.config/opencode/.skill-lock.json`)
- *  so the opencode/`npx skills` skill picker shows them. Existing non-rulekit
+ *  so the opencode/`npx skills` skill picker shows them. Existing non-rulekitx
  *  entries are preserved. */
 export async function updateAgentSkillLock(
   lockFilePath: string,
@@ -236,7 +236,7 @@ export async function updateAgentSkillLock(
   return results;
 }
 
-/** Removes any rulekit-owned subdirectory of `skillsDir` whose name is not
+/** Removes any rulekitx-owned subdirectory of `skillsDir` whose name is not
  *  in `currentNames`. Returns the list of removed directory paths. */
 async function pruneStaleSkills(
   skillsDir: string,
@@ -280,7 +280,7 @@ export async function syncIdeSnippets(
         created: [],
         skipped: [],
         errors: [
-          'RuleKit directory not found. Please run "rulekitx init" first.',
+          'RuleKitX directory not found. Please run "rulekitx init" first.',
         ],
       };
     }
@@ -347,7 +347,7 @@ export async function syncIdeSnippets(
   for (const snipDir of vscodePaths) {
     if (await fileExists(snipDir)) {
       try {
-        const targetFile = path.join(snipDir, "rulekit.code-snippets");
+        const targetFile = path.join(snipDir, "rulekitx.code-snippets");
         await fs.writeFile(targetFile, vsCodeJson, "utf-8");
         results.created.push(targetFile);
       } catch (err: any) {
@@ -399,7 +399,7 @@ export async function syncIdeSnippets(
           const templatesDir = path.join(jbBaseDir, dir.name, "templates");
           try {
             await fs.mkdir(templatesDir, { recursive: true });
-            const targetFile = path.join(templatesDir, "rulekit.xml");
+            const targetFile = path.join(templatesDir, "rulekitx.xml");
             await fs.writeFile(targetFile, jbXml, "utf-8");
             results.created.push(targetFile);
           } catch (err: any) {
@@ -416,9 +416,9 @@ export async function syncIdeSnippets(
     results.skipped.push(jbBaseDir);
   }
 
-  // Generate generic rulekit-snippets.json in ~/.rulekit/ for Neovim users
+  // Generate generic rulekitx-snippets.json in ~/.rulekitx/ for Neovim users
   try {
-    const genericFile = path.join(rootDir, "rulekit-snippets.json");
+    const genericFile = path.join(rootDir, "rulekitx-snippets.json");
     await fs.writeFile(genericFile, vsCodeJson, "utf-8");
     results.created.push(genericFile);
   } catch (err: any) {
@@ -458,7 +458,7 @@ export async function syncIdeSnippets(
         try {
           body = await composeSkillBody(rootDir, item.command);
         } catch {
-          body = `You are executing the **${item.command}** skill via RuleKit. Please refer to ${rootDir} for rules.`;
+          body = `You are executing the **${item.command}** skill via RuleKitX. Please refer to ${rootDir} for rules.`;
         }
 
         const mdContent = buildSkillMd(commandName, item.description, body);
@@ -473,7 +473,7 @@ export async function syncIdeSnippets(
       }
     }
 
-    // Prune stale rulekit-owned skills
+    // Prune stale rulekitx-owned skills
     const removed = await pruneStaleSkills(agentsDir, currentNames);
     if (!("removed" in results)) {
       (results as any).removed = [] as string[];
@@ -512,13 +512,13 @@ interface AgentConfigTarget {
 
 /**
  * Detects known AI agent config directories (OpenCode, Claude) and injects
- * RuleKit skills into them. If the base config dir does not exist on disk,
+ * RuleKitX skills into them. If the base config dir does not exist on disk,
  * the target is silently skipped — the user simply doesn't have that tool
  * installed, and we don't want to create empty stub directories.
  *
- * Skills previously written by RuleKit that no longer correspond to a
- * current rulekit template are removed (pruned) so the agent's skill list
- * stays in sync with the installed rulekit version.
+ * Skills previously written by RuleKitX that no longer correspond to a
+ * current rulekitx template are removed (pruned) so the agent's skill list
+ * stays in sync with the installed rulekitx version.
  */
 export async function syncAgentConfigs(
   rootDir?: string,
@@ -537,7 +537,7 @@ export async function syncAgentConfigs(
         removed: [],
         skipped: [],
         errors: [
-          'RuleKit directory not found. Please run "rulekitx init" first.',
+          'RuleKitX directory not found. Please run "rulekitx init" first.',
         ],
       };
     }
@@ -627,7 +627,7 @@ export async function syncAgentConfigs(
         try {
           body = await composeSkillBody(rootDir, item.command);
         } catch {
-          body = `You are executing the **${item.command}** skill via RuleKit. Please refer to ${rootDir} for rules.`;
+          body = `You are executing the **${item.command}** skill via RuleKitX. Please refer to ${rootDir} for rules.`;
         }
 
         const mdContent = buildSkillMd(commandName, item.description, body);
@@ -642,7 +642,7 @@ export async function syncAgentConfigs(
       }
     }
 
-    // Prune stale rulekit-owned skills that are no longer in the manifest
+    // Prune stale rulekitx-owned skills that are no longer in the manifest
     const removed = await pruneStaleSkills(skillsDir, currentNames);
     results.removed.push(...removed);
 

@@ -6,23 +6,23 @@ import * as path from 'path';
 import { homedir } from 'os';
 
 /**
- * Returns the global RuleKit directory path: ~/.rulekit/
+ * Returns the global RuleKitX directory path: ~/.rulekitx/
  */
 export function getGlobalRulekitDir(): string {
-  return path.join(homedir(), '.rulekit');
+  return path.join(homedir(), '.rulekitx');
 }
 
 /**
- * Returns the local (project-level) RuleKit directory path: .rulekit/
+ * Returns the local (project-level) RuleKitX directory path: .rulekitx/
  */
 export function getLocalRulekitDir(projectDir?: string): string {
-  return path.join(projectDir ?? process.cwd(), '.rulekit');
+  return path.join(projectDir ?? process.cwd(), '.rulekitx');
 }
 
 /**
  * Resolves the active RuleKit directory using priority chain:
- * 1. Local `.rulekit/` in the current project (if exists)
- * 2. Global `~/.rulekit/`
+ * 1. Local `.rulekitx/` in the current project (if exists)
+ * 2. Global `~/.rulekitx/`
  * 
  * @param projectDir - Optional project directory to check for local config.
  *                     Defaults to process.cwd().
@@ -30,13 +30,13 @@ export function getLocalRulekitDir(projectDir?: string): string {
  * @throws If neither local nor global directory exists
  */
 export async function resolveRulekitDir(projectDir?: string): Promise<string> {
-  // Priority 1: Local project-level .rulekit/
+  // Priority 1: Local project-level .rulekitx/
   const localDir = getLocalRulekitDir(projectDir);
   if (await directoryExists(localDir)) {
     return localDir;
   }
 
-  // Priority 2: Global ~/.rulekit/
+  // Priority 2: Global ~/.rulekitx/
   const globalDir = getGlobalRulekitDir();
   if (await directoryExists(globalDir)) {
     return globalDir;

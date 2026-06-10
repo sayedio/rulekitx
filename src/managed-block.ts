@@ -1,12 +1,12 @@
 // src/managed-block.ts
-// Helpers to insert/update/remove a RuleKit-managed block inside an
+// Helpers to insert/update/remove a RuleKitX-managed block inside an
 // always-loaded agent instruction file (CLAUDE.md, AGENTS.md). The block is
 // delimited by markers so user content around it is never touched.
 
 import * as fs from "fs/promises";
 
-export const BLOCK_START = "<!-- RULEKIT:START -->";
-export const BLOCK_END = "<!-- RULEKIT:END -->";
+export const BLOCK_START = "<!-- RULEKITX:START -->";
+export const BLOCK_END = "<!-- RULEKITX:END -->";
 
 /** Builds the full managed block (markers included) from a body string. */
 export function buildManagedBlock(body: string): string {
@@ -14,7 +14,7 @@ export function buildManagedBlock(body: string): string {
 }
 
 /**
- * Returns `content` with the RuleKit block replaced (or appended if absent).
+ * Returns `content` with the RuleKitX block replaced (or appended if absent).
  * Pure string operation — no I/O — so it is easy to test.
  */
 export function upsertBlock(content: string, body: string): string {
@@ -34,7 +34,7 @@ export function upsertBlock(content: string, body: string): string {
 }
 
 /**
- * Returns `content` with the RuleKit block removed. If no block is present
+ * Returns `content` with the RuleKitX block removed. If no block is present
  * the content is returned unchanged (aside from trailing-whitespace cleanup).
  */
 export function stripBlock(content: string): string {
@@ -49,7 +49,7 @@ export function stripBlock(content: string): string {
   return `${before}${after}`.replace(/^\s*\n/, "");
 }
 
-/** Returns true if the file contains a RuleKit managed block. */
+/** Returns true if the file contains a RuleKitX managed block. */
 export function hasBlock(content: string): boolean {
   const startIdx = content.indexOf(BLOCK_START);
   const endIdx = content.indexOf(BLOCK_END);
