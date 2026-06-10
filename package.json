@@ -1,6 +1,6 @@
 {
   "name": "rulekitx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Composable AI Engineering Governance System — global prompt orchestration with /rulekitx-* commands and bulletproof LLM injection",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,9 +13,7 @@
     "type": "git",
     "url": "https://github.com/sayedio/rulekitx.git"
   },
-
   "homepage": "https://rulekitx.vercel.app",
-
   "bugs": {
     "url": "https://github.com/sayedio/rulekitx/issues"
   },
