@@ -9,6 +9,16 @@
   "bin": {
     "rulekitx": "./dist/cli.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sayedio/rulekitx.git"
+  },
+
+  "homepage": "https://rulekitx.vercel.app",
+
+  "bugs": {
+    "url": "https://github.com/sayedio/rulekitx/issues"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
