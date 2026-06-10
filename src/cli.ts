@@ -580,62 +580,83 @@ program
     console.log(chalk.bold("\nRuleKitX Doctor\n"));
 
     const globalDir = getGlobalRulekitDir();
+    const fs = await import("fs/promises");
 
     // Check global directory
-    try {
-      const rootDir = await resolveRulekitDir();
-      console.log(chalk.green(`  ✓ RuleKitX directory found: ${rootDir}`));
+    let rootDir: string;
+    let coreExists = false;
+    let skillCount = 0;
 
-      const isGlobal = rootDir === globalDir;
+    try {
+      rootDir = await resolveRulekitDir();
+    } catch {
+      // Directory doesn't exist at all
+      console.log(chalk.yellow("  ⚠ RuleKitX not initialized\n"));
+      console.log(chalk.white("  Run the following command to get started:\n"));
+      console.log(chalk.cyan("    rulekitx init\n"));
       console.log(
         chalk.gray(
-          `    Type: ${isGlobal ? "Global (~/.rulekitx/)" : "Local (project .rulekitx/)"}`,
+          `  This will scaffold templates to ${globalDir}\n`,
         ),
       );
+      return;
+    }
 
-      // Layer 1 — Core
-      const fs = await import("fs/promises");
-      console.log(chalk.bold("\n  Layer 1 — Core Memory (always-on)"));
-      try {
-        await fs.access(path.join(rootDir, "core.md"));
-        console.log(chalk.green("    ✓ core.md exists"));
-      } catch {
-        console.log(
-          chalk.red('    ✗ core.md missing — run "rulekitx init" to fix'),
-        );
-      }
+    const isGlobal = rootDir === globalDir;
+    console.log(
+      chalk.gray(
+        `  Directory: ${rootDir} (${isGlobal ? "global" : "local"})`,
+      ),
+    );
 
-      // Layer 2 — Domain skills
-      console.log(chalk.bold("\n  Layer 2 — Domain Skills (on-demand)"));
-      try {
-        const skills = await discoverSkills(rootDir);
-        console.log(chalk.green(`    ✓ ${skills.length} skill(s) discovered`));
+    // Layer 1 — Core
+    console.log(chalk.bold("\n  Layer 1 — Core Memory (always-on)"));
+    try {
+      await fs.access(path.join(rootDir, "core.md"));
+      console.log(chalk.green("    ✓ core.md"));
+      coreExists = true;
+    } catch {
+      console.log(chalk.red("    ✗ core.md missing"));
+    }
+
+    // Layer 2 — Domain skills
+    console.log(chalk.bold("\n  Layer 2 — Domain Skills (on-demand)"));
+    try {
+      const skills = await discoverSkills(rootDir);
+      skillCount = skills.length;
+      if (skills.length > 0) {
+        console.log(chalk.green(`    ✓ ${skills.length} skill(s) available`));
         for (const skill of skills) {
           console.log(chalk.gray(`      ${skill.command}`));
         }
-      } catch {
-        console.log(chalk.yellow("    ⚠ Skills directory not found"));
-      }
-
-      // Layer 3 — Project memory
-      console.log(chalk.bold("\n  Layer 3 — Project Memory (project-scoped)"));
-      try {
-        await fs.access(path.join(rootDir, "project-memory.md"));
-        console.log(chalk.green("    ✓ project-memory.md exists"));
-      } catch {
-        console.log(
-          chalk.gray(
-            "    – not present (run `rulekitx init --local` or `rulekitx memory` inside a project)",
-          ),
-        );
+      } else {
+        console.log(chalk.yellow("    ⚠ No skills found"));
       }
     } catch {
-      console.log(chalk.red(`  ✗ RuleKitX not initialized`));
-      console.log(chalk.gray(`    Expected global directory: ${globalDir}`));
-      console.log(chalk.gray(`    Run: rulekitx init`));
+      console.log(chalk.yellow("    ⚠ Skills directory not found"));
     }
 
-    console.log("");
+    // Layer 3 — Project memory
+    console.log(chalk.bold("\n  Layer 3 — Project Memory (project-scoped)"));
+    try {
+      await fs.access(path.join(rootDir, "project-memory.md"));
+      console.log(chalk.green("    ✓ project-memory.md"));
+    } catch {
+      console.log(
+        chalk.gray(
+          "    – not present (optional, run `rulekitx init --local` inside a project)",
+        ),
+      );
+    }
+
+    // Show fix instructions if core or skills are missing
+    if (!coreExists || skillCount === 0) {
+      console.log(chalk.yellow("\n  ─────────────────────────────────────────"));
+      console.log(chalk.yellow("  Setup incomplete. Run this to fix:\n"));
+      console.log(chalk.cyan("    rulekitx init\n"));
+    } else {
+      console.log(chalk.green("\n  ✓ RuleKitX is ready to use!\n"));
+    }
   });
 
 program.parse(process.argv);

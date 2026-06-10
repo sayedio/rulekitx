@@ -1,6 +1,10 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { TemplateEntry } from './types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function scanTemplatesDir(dir: string, baseDir: string = dir): Promise<TemplateEntry[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true });
